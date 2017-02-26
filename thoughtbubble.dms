@@ -1,0 +1,132 @@
+<byondclass name="thoughtbubble">
+
+<!-- Our CSS styling goes here -->
+
+<style>
+	#thoughtbubble {
+
+	}
+
+
+	.thoughtbubble {
+		font-family:'Silkscreen';
+		max-width: 400px;
+		position: absolute;
+		padding-left: 20px;
+		padding-right: 20px;
+		padding-top: 20px;
+		padding-bottom: 20px;
+		text-align: center;
+		background-color: #fff;
+		border: 2px solid #332222;
+		-webkit-border-radius: 5px;
+		-moz-border-radius: 5px;
+		border-radius: 10px;
+		-webkit-box-shadow: 2px 2px 4px #333;
+		-moz-box-shadow: 2px 2px 4px #333;
+		box-shadow: 2px 2px 4px #333;
+		opacity: 0.75;
+	}
+	.thoughtbubble2 {
+		content: ' ';
+		position: absolute;
+		width: 16px;
+		height: 16px;
+		background-color: #fff;
+		border: 2px solid #333;
+		-webkit-border-radius: 10px;
+		-moz-border-radius: 10px;
+		border-radius: 10px;
+		z-index: auto;
+		opacity: 0.75;
+	}
+	.thoughtbubble3 {
+		content: ' ';
+		position: absolute;
+		width: 8px;
+		height: 8px;
+		background-color: #fff;
+		border: 2px solid #333;
+		-webkit-border-radius: 4px;
+		-moz-border-radius: 4px;
+		border-radius: 4px;
+		z-index: auto;
+		opacity: 0.75;
+	}
+</style>
+
+<!-- Our JavaScript code goes here -->
+
+<script>
+(function(){
+  return {
+
+    fn: {
+      output: function(obj,sub) {
+			var string = obj.text;
+
+			string = string.replace(/\n+$/,'');
+			string = string.replace(/^\n+/,'');
+			string = string.replace(/<br\s*\/?>/gi,'');
+			console.log(string);
+			var bubble_html = '';
+			var map = document.getElementById('map');
+			map.style.width = window.innerWidth+'px';
+			map.style.height = window.innerHeight+'px';
+			var y_adjust = 0;
+			var e = this.elem;
+
+			var bubble = document.getElementById('thought');
+			var timer = 5000;
+			if(bubble == null) {
+				var stringcount = 1;
+				var pstring = '<p id='+stringcount+'>'+string+'</p>';
+				bubble_html = "<div id=thought class=thoughtbubble> </div><div id=thoughtbubble2 class=thoughtbubble2></div><div id=thoughtbubble3 class=thoughtbubble3></div>";
+				e.innerHTML = bubble_html;
+				var bubble = document.getElementById('thought');
+				bubble.innerHTML += pstring;
+
+			} else {
+				var bubble = document.getElementById('thought');
+				var stringcount = bubble.childElementCount;
+				stringcount = stringcount + 1;
+				var pstring = '<p id='+stringcount+'>'+string+'</p>';
+				bubble.innerHTML += pstring;
+			}
+
+
+
+
+			if(pstring.length >= 30) {
+				y_adjust= y_adjust+40;
+			}
+			var midx = window.innerWidth/2;
+			var midy = window.innerHeight/2;
+
+			var thoughtbubble3 = document.getElementById('thoughtbubble3');
+			var thoughtbubble2 = document.getElementById('thoughtbubble2');
+
+
+			thoughtbubble2.style.bottom = parseInt(midy+45)+'px';
+			thoughtbubble2.style.left = parseInt(midx+32)+'px';
+			thoughtbubble3.style.bottom = parseInt(midy+40)+'px';
+			thoughtbubble3.style.left = parseInt(midx+26)+'px';
+
+			bubble.style.bottom = parseInt(midy+60)+'px';
+			bubble.style.left = parseInt(midx+16)+'px';
+			setTimeout(function(){
+				var bubble = document.getElementById('thought');
+				var tokill = document.getElementById(stringcount);
+				bubble.removeChild(tokill);
+				if(bubble.childElementCount <1) {
+					e.innerHTML = '';
+				}
+			 }, 5000);
+
+      }
+    }
+  };
+})()
+</script>
+
+</byondclass>

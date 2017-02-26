@@ -1,0 +1,92 @@
+<byondclass name="bags">
+
+<!-- Our CSS styling goes here -->
+
+<style>
+	#bags {
+	    width: 200px;
+	    height: 200px;
+
+	    position: absolute;
+	    left: calc(90% - 200px/2);
+	    top: calc(20% - 200px/2);
+		color: #fff;
+	    background: #444444;
+	    box-shadow: 0px 0px 5px #00FF00;
+	    border-radius: 5px;
+
+	    padding: 15px;
+	    text-align: center;
+	}
+	.item {
+		position: relative;
+		width: 32px;
+		height: 32px;
+		top: 22px;
+		float: left;
+		border: 2px;
+		color: #00FF00;
+		transition:box-shadow .3s linear;
+		border-color: #FF0000;
+		background: #770077;
+
+	}
+	.button {
+	    width: 80px;
+	    height: 25px;
+
+	    margin: auto;
+	    border: 1px solid grey;
+	    background: #BABABA;
+	}
+</style>
+
+<!-- Our JavaScript code goes here -->
+<script>
+(function(){
+	var execute_look = function(pos) {
+		byond.fn.topic("action=look;value=" + pos);
+	};
+	var update_inv = function(obj) {
+		$("#inventory").append(obj.text);
+		alert(obj.text);
+	};
+	return {
+		fn: {
+			create: function() {
+				function init_ui() {
+
+					$(".item").click(function() {
+						execute_look($(this).data("ref"));
+						alert("wat");
+					});
+					//byond.fn.topic("action=ui_ready");
+				}
+
+				(function check_jquery() {
+					setTimeout(function() {
+						if(window.jQuery) {
+							init_ui();
+
+						} else {
+							check_jquery();
+						}
+					}, 500)
+				})();
+			},
+			output: function(obj,sub) {
+				//this.elem.innerHTML = obj.null ? '' : obj.text;
+				if(obj.text == "0") {
+					$('#bags div').empty();
+				} else {
+				$("<div class='item'>"+obj.text+"</div>").appendTo("#bags");
+				}
+			}
+    }
+  };
+})()
+</script>
+
+<div id="inventory" class="inv"></div>
+
+</byondclass>

@@ -1,0 +1,227 @@
+8/24/2015
+Fixed a graphic loading issue when the program tried to load objects that weren't there
+
+12/2/2013
+Added the option to save the VX image as a XP image in the standard 4x4 frames
+
+12/1/2013
+Fixed a bug where reloading male or female while using the other sex would result in the selection window resetting as well for the current selected sex rather than maintaining the current selected window. This is now working correctly.
+
+11/29/2013
+Fixed a bug with the female body that wouldn't correctly draw the selection window if there were a different number of objects between male and female. You would still be able to select the part but the body was not drawn correctly to it.
+Fixed a bug where the selection window wouldn't always be populated with the selections. Although still selectable there were no parts being drawn on the bodies. This should be fixed.
+
+11/22/2013
+Fixed an error where saving all without ever having selected female would result in a blank image from female.
+
+11/12/2013
+Added an option to save every layer of the image individually in its own folder.
+Nothing has changed about the current way of saving.
+Fixed a naming policy. It didn't have any effect on how Sprite Creator 3 worked.
+
+11/10/2013
+Fixed a tail Option that didn't display correctly.
+
+11/9/2013
+Took the Animal Category and created 2 Categories from it "Tail" and "Ears" This allows you to select different tails and ears.
+Fixed a saving error with the Armor category.
+Fixed a saving error with the save name.
+Fixed a bug that wouldn't allow overriding the image if it was on the 2nd selection window.
+
+11/6/2013
+Speed up image loading.
+Added Cyclopse and Minotaur for both male and female.
+
+11/4/2013
+Reduced CPU usage 99%. On my computer Sprite Creator doesn't even register 1% in Task Manager running i3 2100 and no video card.
+
+10/12/2013
+Added a new object set called "Armor"
+Added a Shield and Sword graphic in 10 different colors to the "Armor" object
+Added a new tattoo graphic a Tattoo in 10 different colors to the "Face" object
+Fixed an error that would cause delay when first switching to female
+
+10/4/2013
+Added horns in 10 different colors to Acce2 for both male and female
+
+9/7/2013
+Fixed some objects with missing layers.
+Fixed some objects that were not recolored correctly.
+
+9/6/2013
+Added a lot of images this update, roughly 22 parts in 6 colors each for various objects.
+Moved some objects to other groups that made more sense.
+Added 4 new colors Light Brown, Brown, Purple and Pink for every option in Sprite Creator 3
+
+9/5/2013
+Added an override fuction for the config file so you can change perspective on an image
+
+9/4/2013
+Added a config file for importing your own graphics
+A Data folder has been added to the project to direct you
+where to put your own custom images
+
+9/01/2013
+Added a "Random" button. You can now generate a complete sprite with a single click.
+
+8/30/2013
+Recolored the body colors.
+Added a face option where you can change eye color or put on masks
+Changed the layout to accept a new option "Face"
+
+8/22/2013
+Added a "Backpack" to the options tab in 6 colors. Also recolored option 1 and option 3.
+
+8/20/2013
+Added 6 new bodies for Male and Female in 6 colors each
+
+8/17/2013
+Fixed a bug that wasn't properly setting image layers
+
+8/15/2013
+Fixed an error that wouldn't allow you to make female a ghost
+
+7/19/2013
+Changed a lot of the code base to make things a little fast.
+Loading of sprites is now down at program start rather than when each button is pressed. This increased the response time
+greatly while the program is running
+
+7/18/2013
+Changed the layout to accomidate more features
+You can now remove the base image from your sprite
+
+7/17/2013
+Added Male and Female Orc
+Added Ghosts All images base and otherwise can be ghost
+Added the ability to change the opacity of the ghost
+
+7/16/2013
+Added an "about" option
+
+7/13/2013
+Added an Animated Frame Icon for the start bar. You can see your animated character while the window is minimized.
+Added a way to change the direction of the Animated Frame Icon.
+
+4/20/2013
+Fixed a few graphical errors with male body parts
+
+4/19/2013
+Added an image icon. No more default java icon
+
+4/17/2013
+Reduced CPU usage by 90%
+
+3/10/2013
+Fixed body #11 as it did not display correctly
+Fixed body #8 as it did not display correctly
+
+2/27/2013
+Changed the way saving is done. Hopefully now Mac and Linux works correctly.
+
+2/26/2013
+small graphical change. dragging the mouse after clicking an object will no long continously change the object you are selecting.
+
+2/23/2013
+Fixed a lot of the graphics for Body in both male and female.
+
+2/22/2013
+Added female goblin and female zombie. Fixed up the male goblin to display more correctly.
+
+2/20/2013
+Removed over 200+ lines of code. Changed the window around.
+v2 Made some more changes.
+
+2/19/2013
+Fixed an error that would eventually freeze the program
+
+2/11/2013
+Added confirmation windows to a few options
+
+2/9/2013
+Added a Bangs option
+
+2/8/2013
+Added a Tail/Ear option
+
+2/7/2013
+Fixed something I broke. Saving should now work correctly
+
+2/3/2013
+Replaced Acce2 with 10 new options with 6 colors each.
+
+2/1/2013
+Added 12 new cloak options with 6 different colors each
+
+1/29/2013
+Reworked the GUI again. Now have a Web Applet and an Application version of the program.
+Fixed an error where one of the Female/Hair images was incorrectly named and causing an error.
+Added buttons to the Web Applet version to accomidate not having a menu bar.
+
+1/28/2013
+Changed the layout a bit as well as how the buttons look.
+Now use timers to control the animation preview window.
+If the "Saved" folder does not exist the folder will be created instead of not saving.
+Loading of images is done when you need them rather than all at once on program start.
+removed color buttons for each female and male and instead now selecting a color only changes the current sex.
+
+1/27/2013
+Sprite Creator 3 No longer requires the web browser to run.
+Changed how some of the skin colors look.
+
+1/23/2013
+Thanks to Holder over at RPGRevolution.com I added a new beard sprite set.
+
+1/21/2013
+Added more skin colors Purple and Orange
+
+1/20/2013
+Added the ability to change skin colors to Green, Red, Blue, Black, or Yellow
+
+1/10/2013
+Completely reworked the GUI
+
+12/1/2012
+Fixed an error where if there were any spaces in the save path you would get an error.
+
+6/10/12
+Corrected the way you reload all and save all. Rather than having to click save all and then save now you can just 
+click save all and it will save.
+
+5/8/12
+Ability to save both female and male sprite sheets at the same time added.
+Added a button to show what the sprite looks like scaled 2 times
+Saves where you left off when you change sex (ie if body, hair...are selected when you switch they will again be selected when you return)
+Changed the way the buttons and title splash looks like
+reorganized the layout to accommodate more features or different options
+
+5/1/12
+Further shortened the base code.
+
+4/30/12
+Changed some base code.
+Fixed the saved image names.
+
+1/15/2011
+Reloading now only reloads the currently selected sex rather than both at the same time
+
+1/3/2011
+Fixed a file naming error
+
+8/16/2011
+Grabbing an image now works as intended.
+Animation preview no longer plays slowly on initial start up.
+Animation preview will display correctly.
+
+8/15/2011
+Removed pink place holder box.
+Now works with every browser.
+
+8/15/2011
+Added a box around the image for easier editing of the image as a workaround if the applet freezes.
+
+8/13/2011
+Added a preview for the character animation you're creating.
+Fixed a display error on male sprites involving option graphics.
+
+8/10/2011
+First release, Basic setup with added wing colors.

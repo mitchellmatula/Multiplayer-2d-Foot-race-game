@@ -1,0 +1,262 @@
+<byondclass name="holding">
+
+<style>
+	#holding {
+
+	}
+
+	.lefthand {
+		position: absolute;
+	    width: 100px;
+	    height: 80px;
+	    bottom: 10px;
+	    left: 40%;
+	    margin:0;
+	    background-image: url("lefthand.png");
+	}
+	.lefthand_slot {
+		width: 42px;
+		height: 42px;
+		flex-shrink: 0;
+		display: inline-block;
+		margin:0;
+		vertical-align:top;
+		background-image: url("slotbg.png");
+		position: absolute;
+		right: 10px;
+		top: 8px;
+	}
+
+	[draggable] {
+		-moz-user-select: none;
+		-khtml-user-select: none;
+		-webkit-user-select: none;
+		user-select: none;
+		/* Required to make elements draggable in old WebKit */
+		-khtml-user-drag: element;
+		-webkit-user-drag: element;
+	}
+	.item {
+		width: 40px;
+		height: 40px;
+
+		background-size: 32px 32px;
+		background-repeat: no-repeat;
+		background-position: center center;
+		display: inline-block;
+	}
+	.item:hover {
+		-webkit-box-shadow: inset 2px -2px 14px 2px rgba(255,255,255,0.2);
+		-moz-box-shadow: inset 2px -2px 14px 2px rgba(255,255,255,0.2);
+		box-shadow: inset 2px -2px 14px 2px rgba(255,255,255,0.2);
+
+	}
+</style>
+
+
+<script>
+(function(){
+	var dragSrc;
+	var dragged_inv_ref;
+	var offX, offY;
+	function fixListeners() {
+		var a, i;
+		e = document.getElementById("inv");
+
+		// cycle through all the existing  .items and .item_slots and ensure the drag listeners are set
+		a = e.querySelectorAll('.item');
+		for(i=a.length; i--;) a[i].addEventListener('mouseover', hover); // adds the event click to the items and uses clickhandler function above
+
+		a = e.querySelectorAll('.inv_slot');
+		for(i=a.length; i--;) a[i].addEventListener('drop', drop); // adds the event click to the items and uses clickhandler function above
+
+		a = e.querySelectorAll('.inv_slot');
+		for(i=a.length; i--;) a[i].addEventListener('dragover', allowDrop); // adds the event click to the items and uses clickhandler function above
+
+		a = e.querySelectorAll('.inv_slot');
+		for(i=a.length; i--;) a[i].addEventListener('dragstart', drag); // adds the event click to the items and uses clickhandler function above
+
+		a = e.querySelectorAll('.inv_slot');
+		for(i=a.length; i--;) a[i].addEventListener('dragend', dragEnd); // adds the event click to the items and uses clickhandler function above
+
+		a = e.querySelectorAll('.inv_slot');
+		for(i=a.length; i--;) a[i].addEventListener('dblclick', dblClick); // adds the event click to the items and uses clickhandler function above
+
+
+		// set listeners on the rest of the bags to add drag functionality
+		var inv_header_elem = document.getElementById('inv_header');
+		var inv_toggle_elem = document.getElementById('inv_toggle');
+		inv_header_elem.addEventListener('mousedown', dragBagsStart);
+		inv_header_elem.addEventListener('mouseup', dragBagsStop);
+		inv_toggle_elem.addEventListener('click', toggleInv);
+		var inventory = document.getElementById('inv_bg');
+		// ensure the collapse button is pointing the right way
+		if(inventory.style.display !=='none'){
+			document.getElementById('inv_toggle').style.backgroundImage = "url('inv_collapse.png')";
+		}
+		else
+		{
+			document.getElementById('inv_toggle').style.backgroundImage = "url('inv_expand.png')";
+		}
+	}
+	function dragEnd(e) {
+		byond.fn.topic("action=lockmovement;v1=0");
+		var dropboxes = document.getElementById('dropboxes');
+		dropboxes.innerHTML = '';
+	}
+	function drag(e) { // called when item is dragged
+		// dragSrc will be the "previous slot"
+		dragSrc = this;
+		localStorage.setItem("dragSrc", this.id);
+
+		byond.fn.topic("action=lockmovement;v1=1");
+		byond.fn.topic("action=DropBox;v1="+e.target.getAttribute("data-ref")+";v2="+e.target.getAttribute("data-slot"));
+		dragged_inv_ref = e.target.getAttribute("data-ref");
+		e.dataTransfer.effectAllowed = 'move';
+		e.dataTransfer.setData('text/html', this.innerHTML);
+
+
+	};
+	function allowDrop(e) {
+		e.preventDefault();
+		return false;
+	}
+	function hover(e) { // hovering over an item to show info in the tooltip
+		var tooltip = document.getElementById("tooltip");
+		var name= '', weight='', ref='';
+		name = e.target.getAttribute("data-name");
+		weight = e.target.getAttribute("data-weight");
+		ref = e.target.getAttribute("data-ref");
+
+		tooltip.innerHTML = '<b>'+name+'</b></font>';
+	}
+	function moveBags(e) { // is added to user's client when user starts dragging
+		dragSrc = this;
+		var bags = document.getElementById("bags")
+		bags.style.position = 'absolute';
+		bags.style.top = (e.clientY-offY) + 'px';
+		bags.style.left = (e.clientX-offX) + 'px';
+		e.stopPropagation();
+
+	}
+	function toggleInv(e) {  // click the arrow on header to collapse and expand the inventory
+		var inventory = document.getElementById('inv_bg');
+		if(inventory.style.display !=='none'){
+			inventory.style.display = 'none';
+			document.getElementById('inv_toggle').style.backgroundImage = "url('inv_expand.png')";
+		}
+		else
+		{
+			inventory.style.display = 'inline-block';
+			document.getElementById('inv_toggle').style.backgroundImage = "url('inv_collapse.png')";
+		}
+
+		e.stopPropagation(); // stops handlers below in the DOM tree from triggering
+		e.preventDefault();
+	};
+	function dragBagsStop(e) { // removes the moveBags when user lifts mouse button
+		var bags = document.getElementById("bags")
+		bags.removeEventListener('mousemove', moveBags, true);
+		e.stopPropagation();
+		var dropboxes = document.getElementById('dropboxes');
+		dropboxes.innerHTML = '';
+
+	};
+	function dblClick(e) { // hovering over an item to show info in the tooltip
+		byond.fn.topic("action=examine;v1="+e.target.getAttribute("data-ref"));
+		e.stopPropagation(); // stops handlers below in the DOM tree from triggering
+		e.preventDefault();
+	}
+	function dragBagsStart(e) {  // is called when user clicks and drags the header
+
+		dragSrc = this;
+
+		var bags = document.getElementById("bags")
+		console.log('drag target'+ e.target.getAttribute("class") + 'and this is ' +this);
+		console.log('clientX' + e.clientX + '   clientY' + e.clientY);
+		bags.style.position = 'absolute';
+		offY= e.clientY-parseInt(bags.offsetTop);
+		offX= e.clientX-parseInt(bags.offsetLeft);
+		bags.addEventListener('mousemove', moveBags, true);
+		e.stopPropagation();
+
+	};
+
+	function drop(e) {
+		e.stopPropagation();
+		if (dragSrc != this) {
+			var dragSrcId = localStorage.getItem("dragSrc");
+			var dragSrcRef = localStorage.getItem("dragSrcRef");
+			var dragSrcInvPos = localStorage.getItem("dragSrcInvPos");
+			console.log("dragSrcId: "+ dragSrcId);
+			console.log("dragSrcRef: "+ dragSrcRef);
+			console.log("dragSrcInvPos: "+ dragSrcInvPos);
+			console.log("this slot: "+ this.getAttribute("data-slot"));
+
+			dragSrc = document.getElementById(dragSrcId);
+			dragSrc.innerHTML = this.innerHTML;
+
+
+
+
+			// get vars of all the locations and slots
+			var original_inv_position = dragSrcInvPos;
+			var replaced_inv_position = this.getAttribute("data-slot");
+			var replaced_inv_ref = this.getAttribute("data-ref");
+
+			console.log("replaced inv pos:"+replaced_inv_position);
+			console.log("replaced inv ref:"+replaced_inv_ref);
+
+
+			// send command to byond client to change the inv_positions in user's inventory
+			byond.fn.topic('action=change_inv_slot;v1='+dragSrcRef+';v2='+replaced_inv_position);
+			if(replaced_inv_ref==null || replaced_inv_ref==''){
+				console.log("did not replace a slot");
+			} else {
+
+				if(replaced_inv_ref!=null){
+					console.log("updating swapped inventory item");
+					byond.fn.topic("action=change_inv_slot;v1="+replaced_inv_ref+";v2="+replaced_inv_position);
+				}
+			}
+			fixListeners();
+			var dropboxes = document.getElementById('dropboxes');
+			dropboxes.innerHTML = '';
+			byond.fn.topic("action=lockmovement;v1=0");
+
+
+		}
+		return false;
+	}
+	function checkLeftHand()
+	{
+		var lefthand_slot_html = localStorage.getItem("lefthand_slot_html");
+		if(lefthand_slot_html)
+		{
+			document.getElementById("lefthand_slot").innerHTML = lefthand_slot_html;
+		}
+	}
+  return {
+    fn: {
+      output: function(obj,sub) {
+
+			var ez =  document.getElementById("holding");
+			var html = '';
+			html = '<div id=lefthand class=lefthand><div id=lefthand_slot data-ref=\'\' data-slot=\'lefthand\' class=lefthand_slot></div></div>';
+			ez.innerHTML = html;
+			var lefthand_elem = document.getElementById('lefthand_slot');
+
+			//lefthand_elem.addEventListener('mouseover', hover); // adds the event click to the items and uses clickhandler function above
+			lefthand_elem.addEventListener('drop', drop); // adds the event click to the items and uses clickhandler function above
+			lefthand_elem.addEventListener('dragover', allowDrop); // adds the event click to the items and uses clickhandler function above
+			lefthand_elem.addEventListener('dragstart', drag); // adds the event click to the items and uses clickhandler function above
+			lefthand_elem.addEventListener('dragend', dragEnd); // adds the event click to the items and uses clickhandler function above
+			lefthand_elem.addEventListener('dblclick', dblClick); // adds the event click to the items and uses clickhandler function above
+
+      }
+    }
+  };
+})()
+</script>
+
+</byondclass>

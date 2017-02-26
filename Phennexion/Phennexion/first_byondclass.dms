@@ -1,0 +1,49 @@
+<byondclass name="firstclass">
+
+<!-- Our CSS styling goes here -->
+
+<style>
+	#firstclass {
+	    width: 200px;
+	    height: 100px;
+
+	    position: absolute;
+	    left: calc(50% - 200px/2);
+	    top: calc(50% - 100px/2);
+
+	    background: #00FF00;
+	    box-shadow: 0px 0px 10px #fff;
+	    border-radius: 15px;
+
+	    padding: 15px;
+	    text-align: center;
+	}
+
+	.button {
+	    width: 80px;
+	    height: 25px;
+
+	    margin: auto;
+	    border: 1px solid grey;
+	    background: #BABABA;
+	}
+</style>
+
+<!-- Our JavaScript code goes here -->
+
+<script>
+{
+	fn: {
+		output: function(obj) {
+			if(obj.hasOwnProperty("text")) {
+				this.ui.content.innerHTML = obj.text;
+			}
+		}
+	}
+}
+</script>
+
+<div id="content" class="content"></div>    <!-- The div that will be containing our text. -->
+<div id="button" class="button">Okay</div>  <!-- The div representing our confirmation button. -->
+
+</byondclass>

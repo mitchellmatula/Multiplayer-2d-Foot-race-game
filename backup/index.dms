@@ -1,0 +1,42 @@
+<html>
+<head>
+<link href='https://fonts.googleapis.com/css?family=Play' rel='stylesheet' type='text/css'>
+</head>
+<body>
+	<div id="main" byondclass="child" skinparams="left=map;fit=left;is-vert=true;">
+		<div id="map" byondclass="map" skinparams="letterbox=true;zoom=1;"></div>
+	</div>
+	<div id="output" byondclass="output"></div>
+	<div id="input" byondclass="input"></div>
+	<div id="firstclass" byondclass="firstclass" skinparams="is-visible=false"></div>
+	<div id="bags" byondclass="bags" skinparams="is-visible=true"></div>
+	<div id="dropboxes" byondclass="dropboxes" skinparams="is-visible=true"></div>
+</body>
+</html>
+<style>
+	.byond_output {
+		background-color: #000000;
+		color: #fff;
+		width: 400px;
+	    height: 200px;
+		font-family: 'Play', sans-serif;
+	    position: absolute;
+	    left: calc(85% - 400px/2);
+	    top: calc(85% - 200px/2);
+	    box-shadow: 0px 0px 10px #fff;
+	    border-radius: 15px;
+		color: #ced3e7;
+	    padding: 15px;
+	}
+	Alternatively, you can use the selector #output. If you want to select a class, however, you always
+	have to prefix it with "byond_".
+	*/
+
+</style>
+
+macro
+	T return "say"
+macro
+	I return "listInv"
+macro
+	O return "clearinv"

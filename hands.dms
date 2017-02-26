@@ -1,0 +1,76 @@
+<byondclass name="holding">
+
+<!-- Our CSS styling goes here -->
+
+<style>
+	#holding {
+
+	}
+
+	.lefthand {
+		position: absolute;
+	    width: 100px;
+	    height: 80px;
+	    bottom: 10px;
+	    left: 40%;
+	    margin:0;
+	    background-image: url("lefthand.png");
+	}
+	.lefthand_slot {
+		width: 42px;
+		height: 42px;
+		flex-shrink: 0;
+		display: inline-block;
+		margin:0;
+		vertical-align:top;
+		background-image: url("slotbg.png");
+		position: absolute;
+		right: 10px;
+		top: 8px;
+	}
+
+	[draggable] {
+		-moz-user-select: none;
+		-khtml-user-select: none;
+		-webkit-user-select: none;
+		user-select: none;
+		/* Required to make elements draggable in old WebKit */
+		-khtml-user-drag: element;
+		-webkit-user-drag: element;
+	}
+	.item {
+		width: 40px;
+		height: 40px;
+
+		background-size: 32px 32px;
+		background-repeat: no-repeat;
+		background-position: center center;
+		display: inline-block;
+	}
+	.item:hover {
+		-webkit-box-shadow: inset 2px -2px 14px 2px rgba(255,255,255,0.2);
+		-moz-box-shadow: inset 2px -2px 14px 2px rgba(255,255,255,0.2);
+		box-shadow: inset 2px -2px 14px 2px rgba(255,255,255,0.2);
+
+	}
+</style>
+
+<!-- Our JavaScript code goes here -->
+
+<script>
+{
+    fn: {
+        output: function(obj) {
+            	var hands =this.elem;
+				var html = '';
+				html = '<div id=lefthand class=lefthand><div id=lefthand_slot data-slot=lefthand class=inv_slot></div>123</div>';
+				hands.innerHTML = html;
+				console.log('wtf');
+
+        }
+    }
+}
+
+</script>
+
+</byondclass>

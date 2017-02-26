@@ -1,0 +1,19 @@
+// BEGIN_INTERNALS
+/*
+LAST_COMPILE_TIME: 1488136045
+DIR: backup Phennexion Phennexion\Phennexion 
+PACKAGE_RSC_NAME: C:\Users\mitch\OneDrive for Business\Phennexion\Phennexion\Phennexion\Phennexion_rsc.zip
+AUTO_FILE_DIR: ON
+PACKAGE_DMB_INFO: 
+MAP_ICON_TYPE: 0
+PACKAGE_DME_NAME: C:\Users\mitch\OneDrive for Business\Phennexion\Phennexion\Phennexion\Phennexion_src.zip
+LAST_COMPILE_VERSION: 511.1374
+PACKAGE_DME_START: 
+PACKAGE_TYPE: 0
+WINDOW: thoughtbubble.dms;Info.dms;tocut.dmi;organics.dmi;inorganics.dmi;hands.dms;holding.dms;Inventory.dms;index.dms;speechbubble.dms;backup\Inventory.dms;Phennexion\Phennexion\Inventory.dms;Phennexion.dm;Inorganics.dm;Grid.dm;Proc.dm;backup\Mob.dm;Client.dm;Customization.dm;Glide.dm;Mob.dm
+PACKAGE_DME_INFO: 
+FILE: Mob.dm
+PACKAGE_DME_DEMO: 
+PACKAGE_DMB_NAME: C:\Users\mitch\OneDrive for Business\Phennexion\Phennexion\Phennexion\Phennexion.zip
+*/
+// END_INTERNALS

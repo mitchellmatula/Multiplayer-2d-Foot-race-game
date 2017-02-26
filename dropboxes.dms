@@ -1,0 +1,134 @@
+<byondclass name="dropboxes">
+
+<!-- Our CSS styling goes here -->
+
+<style>
+	#dropboxes {
+
+	}
+	.dropbox {
+		position: absolute;
+		width: 32px;
+		height: 32px;
+		display: block;
+		outline: 2px dashed #ced3e7;
+		top: 100px;
+		left: 100px;
+		opacity: 0.6;
+	}
+</style>
+
+<!-- Our JavaScript code goes here -->
+<script>
+(function(){
+	var dragSrc;
+	function allowDrop(e) {
+		e.preventDefault();
+		return false;
+	};
+	function drop(e) {
+		e.stopPropagation();
+
+		this.innerHTML = e.dataTransfer.getData('text/html');
+		var inside = document.getElementById(e.target.getAttribute("id")).firstChild;
+		//console.log(inside );
+
+		// get vars of all the locations and slots
+		var dragged_inv_ref = inside.getAttribute("data-ref");
+		var drop_direction = e.target.getAttribute("data-dir");
+		//console.log("drop dir:"+drop_direction+"---ref:"+dragged_inv_ref+"--- innerHTML:"+this.innerHTML);
+		// send command to byond client to change the inv_positions in user's inventory
+		byond.fn.topic('action=dropitem;v1='+dragged_inv_ref+";v2="+drop_direction);
+
+		var dropboxes = document.getElementById('dropboxes');
+		dropboxes.innerHTML = '';
+
+		return false;
+	};
+	return {
+		fn: {
+
+	    output: function(obj,sub) {
+	      this.elem.innerHTML = obj.null ? '' : obj.text;
+
+			// decode and fix up the json_encode'd list from the output
+			var string = byond.htmlDecode(obj.text);
+			var id, m, icon='';
+			string = string.replace(/\n+$/,'');
+			string = string.replace(/^\n+/,'');
+			string = string.replace(/<br\s*\/?>/gi,'');
+
+			//console.log(string);
+			// make a new array that will parse the fixed up string from above
+			var inv_array = JSON.parse(string);
+
+			for(var key in inv_array) {
+				if(string.hasOwnProperty(key)) {
+				// find the first key and parse it too, so that we can dig into the items actual data
+
+					item = inv_array[key];
+					id = item.ref;
+					//console.log("ref"+item.ref+"-loc:"+item.usrlocx+","+item.usrlocy+","+item.usrlocz+"-slot:"+item.slot);
+					//console.log(item.checkNorth);
+					var map = document.getElementById('map');
+					map.style.width = window.innerWidth+'px';
+					map.style.height = window.innerHeight+'px';
+					//console.log("map width:"+map.style.width + " window width:" + window.innerWidth + "window height:" + window.innerHeight)
+					var midx = window.innerWidth/2
+					var midy = window.innerHeight/2
+
+					if(item.checkNorth == 1) {
+						this.elem.innerHTML = "<div id=dropboxNorth data-dir=north class=dropbox></div>";
+					}
+					if(item.checkWest == 1) {
+						this.elem.innerHTML += "<div id=dropboxWest data-dir=west class=dropbox></div>";
+					}
+					if(item.checkEast == 1) {
+						this.elem.innerHTML += "<div id=dropboxEast data-dir=east class=dropbox></div>";
+					}
+					if(item.checkSouth == 1) {
+						this.elem.innerHTML += "<div id=dropboxSouth data-dir=south class=dropbox></div>";
+					}
+					if(item.checkSouth == 1) {
+						this.elem.innerHTML += "<div id=dropboxSouth data-dir=south class=dropbox></div>";
+					}
+					if(item.checkNorth == 1) {
+						var dropboxNorth = document.getElementById('dropboxNorth');
+						dropboxNorth.addEventListener('dragover', allowDrop);
+						dropboxNorth.addEventListener('drop', drop);
+						dropboxNorth.style.top = parseInt(midy-66)+'px';
+						dropboxNorth.style.left = parseInt(midx)+'px';
+					}
+					if(item.checkWest == 1) {
+						var dropboxWest = document.getElementById('dropboxWest');
+						dropboxWest.addEventListener('dragover', allowDrop);
+						dropboxWest.addEventListener('drop', drop);
+						dropboxWest.style.top = parseInt(midy-34)+'px';
+						dropboxWest.style.left = parseInt(midx-34)+'px';
+					}
+					if(item.checkEast == 1) {
+						var dropboxEast = document.getElementById('dropboxEast');
+						dropboxEast.addEventListener('dragover', allowDrop);
+						dropboxEast.addEventListener('drop', drop);
+						dropboxEast.style.top = parseInt(midy-34)+'px';
+						dropboxEast.style.left = parseInt(midx+34)+'px';
+					}
+					if(item.checkSouth == 1) {
+						var dropboxSouth = document.getElementById('dropboxSouth');
+						dropboxSouth.addEventListener('dragover', allowDrop);
+						dropboxSouth.addEventListener('drop', drop);
+						dropboxSouth.style.top = parseInt(midy+2)+'px';
+						dropboxSouth.style.left = parseInt(midx)+'px';
+					}
+
+
+			}
+		}
+    }
+  }
+    };
+})()
+</script>
+
+<div id="content" class="content"></div>    <!-- The div that will be containing our text. -->
+</byondclass>

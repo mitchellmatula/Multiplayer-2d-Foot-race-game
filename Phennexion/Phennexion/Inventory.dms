@@ -1,0 +1,103 @@
+<byondclass name="bags">
+
+<!-- Our CSS styling goes here -->
+
+<style>
+	#bags {
+	    width: 200px;
+	    height: 200px;
+
+	    position: absolute;
+	    left: calc(90% - 200px/2);
+	    top: calc(20% - 200px/2);
+		color: #fff;
+	    background: #444444;
+	    box-shadow: 0px 0px 5px #000000;
+	    border-radius: 5px;
+
+	    padding: 15px;
+	    text-align: center;
+	}
+	.item {
+		position: relative;
+		width: 40px;
+		height: 40px;
+		float: left;
+		border-left: 2px solid;
+		border-top: 2px solid;
+		border-right: 2px solid;
+		border-bottom: 2px solid;
+
+		border-color: #333333;
+		color: #00FF00;
+		background: #444444;
+		background-size: 32px 32px;
+		background-repeat: no-repeat;
+		background-position: center center;
+
+	}
+	.button {
+	    width: 80px;
+	    height: 25px;
+
+	    margin: auto;
+	    border: 1px solid grey;
+	    background: #BABABA;
+	}
+</style>
+
+<!-- Our JavaScript code goes here -->
+<script>
+(function(){
+    function clickhandler(e) {
+        byond.fn.topic("action=look;value=" + e.target.getAttribute("data-ref"));
+        e.stopPropagation(); // stops handlers from below from triggering
+        e.preventDefault();
+    };
+
+    return {
+        fn: {
+            output: function(obj,sub) {
+                var e = this.elem, a, i, html;
+                // decode and fix up the json_encode'd list from the output
+                var string = byond.htmlDecode(obj.text);
+                var id, m, icon='';
+                string = string.replace(/\n+$/,'');
+                string = string.replace(/^\n+/,'');
+                string = string.replace(/<br\s*\/?>/gi,'');
+                // make a new array that will parse the fixed up string from above
+                var inv_array = JSON.parse(string);
+                html = '';
+                // loop through the parsed array to find the objects
+				for(var key in inv_array) {
+					if(string.hasOwnProperty(key)) {
+						// find the first key and parse it too, so that we can dig into the items actual data
+
+						item = inv_array[key];
+
+						id = item.ref;
+						if(id && (m=id.match(/\[0x([0-9a-f]+)\]/i))) {
+							id = parseInt(m[1],16);
+							icon = '<img atom='+id+'>';
+						}
+
+						// add the item's properties into it's own div!
+						html += '<div data-ref='+item.ref+' data-quality='+item.quality+' class=item >'+icon+'</div>';
+					}
+				}
+				console.log(html);
+
+				// set the inventory output to the bags div
+                e.innerHTML = html;
+
+                // cycle through all the existing  .items and ensure there's a click listener
+                a = e.querySelectorAll('.item');
+                for(i=a.length; i--;) a[i].addEventListener('click', clickhandler);
+				byond.fillAtomIcons();
+            }
+        }
+    };
+})()
+</script>
+
+</byondclass>

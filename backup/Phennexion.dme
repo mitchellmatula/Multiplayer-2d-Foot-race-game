@@ -1,0 +1,31 @@
+// DM Environment file for Phennexion.dme.
+// All manual changes should be made outside the BEGIN_ and END_ blocks.
+// New source code should be placed in .dm files: choose File/New --> Code File.
+
+// BEGIN_INTERNALS
+// END_INTERNALS
+
+// BEGIN_FILE_DIR
+#define FILE_DIR .
+// END_FILE_DIR
+
+// BEGIN_PREFERENCES
+// END_PREFERENCES
+
+// BEGIN_INCLUDE
+#include "Client.dm"
+#include "Customization.dm"
+#include "Glide.dm"
+#include "Minerals.dm"
+#include "Mob.dm"
+#include "Organics.dm"
+#include "Phennexion.dm"
+#include "Proc.dm"
+#include "Turfs.dm"
+#include "World.dmm"
+#include "dropboxes.dms"
+#include "first_byondclass.dms"
+#include "index.dms"
+#include "Inventory.dms"
+// END_INCLUDE
+

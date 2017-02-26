@@ -1,0 +1,303 @@
+<byondclass name="bags">
+
+<!-- Our CSS styling goes here -->
+
+<style>
+	#bags {
+	    width: 200px;
+	    height: 300px;
+
+	    position: absolute;
+	    left: calc(90% - 200px/2);
+	    top: calc(30% - 300px/2);
+	}
+	.item {
+		width: 40px;
+		height: 40px;
+
+		background-size: 32px 32px;
+		background-repeat: no-repeat;
+		background-position: center center;
+		display: inline-block;
+	}
+	.item:hover {
+		-webkit-box-shadow: inset 2px -2px 14px 2px rgba(255,255,255,0.2);
+		-moz-box-shadow: inset 2px -2px 14px 2px rgba(255,255,255,0.2);
+		box-shadow: inset 2px -2px 14px 2px rgba(255,255,255,0.2);
+
+	}
+	.tooltip {
+		padding-top: 16px;
+		text-align: left;
+		font-family: 'Play', sans-serif;
+		font-size: 14px;
+		width: 168px;
+		height: 50px;
+		display: inline-block;
+		margin:0;
+		vertical-align:top;
+		color: #ced3e7;
+		opacity: 0.94;
+	}
+	.inventory {
+		width: 168px;
+		height: 168px;
+		display: inline-block;
+		margin:0;
+		vertical-align:top;
+	}
+	.inv_slot {
+		width: 42px;
+		height: 42px;
+		flex-shrink: 0;
+		display: inline-block;
+		margin:0;
+		vertical-align:top;
+		background-image: url("slotbg.png");
+	}
+	.inv_header {
+		display: inline-block;
+		margin:0;
+		vertical-align:top;
+		width: 200px;
+		height: 32px;
+		background-image: url("inv_header.png");
+	}
+	.inv_toggle {
+		display: inline-block;
+		position: absolute;
+		margin:0;
+		vertical-align:top;
+		width: 32px;
+		height: 32px;
+		left: 166px;
+		background-image: url("inv_collapse.png");
+		background-size: 32px 32px;
+		background-repeat: no-repeat;
+	}
+	.inv_bg {
+		padding-left:16px;
+		padding-top:16px;
+		display: inline-block;
+		margin:0;
+		vertical-align:top;
+		width: 200px;
+		height: 268px;
+		background-image: url("inv_bg.png");
+	}
+	.text{
+		background-image: url("inv_expand.png");
+
+	}
+	[draggable] {
+	-moz-user-select: none;
+	-khtml-user-select: none;
+	-webkit-user-select: none;
+	user-select: none;
+	/* Required to make elements draggable in old WebKit */
+	-khtml-user-drag: element;
+	-webkit-user-drag: element;
+	}
+</style>
+
+<!-- Our JavaScript code goes here -->
+<script>
+(function(){
+	var dragSrc;
+	var dragged_inv_ref;
+	var offX, offY;
+
+	function fixListeners() {
+		var a, i;
+		e = document.getElementById("inv");
+
+		// cycle through all the existing  .items and .item_slots and ensure the drag listeners are set
+		a = e.querySelectorAll('.item');
+		for(i=a.length; i--;) a[i].addEventListener('mouseover', hover); // adds the event click to the items and uses clickhandler function above
+
+		a = e.querySelectorAll('.inv_slot');
+		for(i=a.length; i--;) a[i].addEventListener('drop', drop); // adds the event click to the items and uses clickhandler function above
+
+		a = e.querySelectorAll('.inv_slot');
+		for(i=a.length; i--;) a[i].addEventListener('dragover', allowDrop); // adds the event click to the items and uses clickhandler function above
+
+		a = e.querySelectorAll('.inv_slot');
+		for(i=a.length; i--;) a[i].addEventListener('dragstart', drag); // adds the event click to the items and uses clickhandler function above
+
+		a = e.querySelectorAll('.inv_slot');
+		for(i=a.length; i--;) a[i].addEventListener('dragend', dragEnd); // adds the event click to the items and uses clickhandler function above
+
+		// set listeners on the rest of the bags to add drag functionality
+		var inv_header_elem = document.getElementById('inv_header');
+		var inv_toggle_elem = document.getElementById('inv_toggle');
+		inv_header_elem.addEventListener('mousedown', dragBagsStart);
+		inv_header_elem.addEventListener('mouseup', dragBagsStop);
+		inv_toggle_elem.addEventListener('click', toggleInv);
+		var inventory = document.getElementById('inv_bg');
+		// ensure the collapse button is pointing the right way
+		if(inventory.style.display !=='none'){
+			document.getElementById('inv_toggle').style.backgroundImage = "url('inv_collapse.png')";
+		}
+		else
+		{
+			document.getElementById('inv_toggle').style.backgroundImage = "url('inv_expand.png')";
+		}
+	}
+	function hover(e) { // hovering over an item to show info in the tooltip
+		var tooltip = document.getElementById("tooltip");
+		var name= '', quality='', ref='';
+		name = e.target.getAttribute("data-name");
+		quality = e.target.getAttribute("data-quality");
+		ref = e.target.getAttribute("data-ref");
+
+		tooltip.innerHTML = '<b>'+name+'</b><br><font size=-1>Quality : '+quality+'<br>Ref : '+ref+'</font>';
+	}
+	function toggleInv(e) {  // click the arrow on header to collapse and expand the inventory
+		var inventory = document.getElementById('inv_bg');
+		if(inventory.style.display !=='none'){
+			inventory.style.display = 'none';
+			document.getElementById('inv_toggle').style.backgroundImage = "url('inv_expand.png')";
+		}
+		else
+		{
+			inventory.style.display = 'inline-block';
+			document.getElementById('inv_toggle').style.backgroundImage = "url('inv_collapse.png')";
+		}
+
+		//console.log('drag target:'+ e.target.getAttribute("class") + 'and this is ' +status);
+		e.stopPropagation(); // stops handlers below in the DOM tree from triggering
+		e.preventDefault();
+	};
+	function dragBagsStart(e) {  // is called when user clicks and drags the header
+
+		dragSrc = this;
+
+		var bags = document.getElementById("bags")
+
+		bags.style.position = 'absolute';
+		offY= e.clientY-parseInt(bags.offsetTop);
+		offX= e.clientX-parseInt(bags.offsetLeft);
+		bags.addEventListener('mousemove', moveBags, true);
+		e.stopPropagation();
+
+	};
+	function moveBags(e) { // is added to user's client when user starts dragging
+		dragSrc = this;
+		var bags = document.getElementById("bags")
+		bags.style.position = 'absolute';
+		bags.style.top = (e.clientY-offY) + 'px';
+		bags.style.left = (e.clientX-offX) + 'px';
+		e.stopPropagation();
+
+	};
+
+	function dragBagsStop(e) { // removes the moveBags when user lifts mouse button
+		var bags = document.getElementById("bags")
+		bags.removeEventListener('mousemove', moveBags, true);
+		e.stopPropagation();
+
+	};
+	function drag(e) { // called when item is dragged
+		// dragSrc will be the "previous slot"
+		dragSrc = this;
+
+		byond.fn.topic("action=DropBox;v1="+e.target.getAttribute("data-ref")+";v2="+e.target.getAttribute("data-slot"));
+		dragged_inv_ref = e.target.getAttribute("data-ref");
+		e.dataTransfer.effectAllowed = 'move';
+		e.dataTransfer.setData('text/html', this.innerHTML);
+	};
+
+	function drop(e) {
+		e.stopPropagation();
+		if (dragSrc != this) {
+			dragSrc.innerHTML = this.innerHTML;
+			this.innerHTML = e.dataTransfer.getData('text/html');
+
+			// get vars of all the locations and slots
+			var dragged_inv_position = this.getAttribute("data-slot");
+			var replaced_inv_position = dragSrc.getAttribute("data-slot");
+			var replaced_inv_ref = e.target.closest('div').getAttribute("data-ref");
+
+			// send command to byond client to change the inv_positions in user's inventory
+			byond.fn.topic('action=change_inv_slot;v1='+dragged_inv_ref+';v2='+dragged_inv_position);
+			if(replaced_inv_ref==null){
+				console.log("did not replace a slot");
+			}
+			if(replaced_inv_ref!=null){
+				console.log("updating swapped inventory item");
+				byond.fn.topic("action=change_inv_slot;v1="+replaced_inv_ref+";v2="+replaced_inv_position);
+			}
+			fixListeners();
+			var dropboxes = document.getElementById('dropboxes');
+			dropboxes.innerHTML = '';
+		}
+		return false;
+	};
+	function dragEnd(e) {
+
+	};
+	function allowDrop(e) {
+		e.preventDefault();
+		return false;
+	};
+    return {
+        fn: {
+            output: function(obj,sub) {  // the start of the output function from bags() proc
+					var e = this.elem;
+
+
+					// decode and fix up the json_encode'd list from the output
+					var string = byond.htmlDecode(obj.text);
+					var id, m, icon='';
+					string = string.replace(/\n+$/,'');
+					string = string.replace(/^\n+/,'');
+					string = string.replace(/<br\s*\/?>/gi,'');
+
+
+					// make a new array that will parse the fixed up string from above
+					var inv_array = JSON.parse(string);
+
+					// build the UI Divs
+					var html = '';
+					html = '<div id=inv_header class=inv_header><div id=inv_toggle class=inv_toggle></div></div>';
+					html += '<div id=inv_bg class=inv_bg><div id=inv class=inventory></div><div id=tooltip class=tooltip></div></div>';
+					e.innerHTML = html;
+
+					// build item slots
+					var slots_html ='';
+					for(i = 1; i < 17; i++) {
+						 slots_html += '<div id=inv_slot'+i+' data-slot=='+i+' class=inv_slot></div>';
+					}
+					document.getElementById("inv").innerHTML += slots_html;
+
+
+					var html_item = '';
+                // loop through the parsed array to find the objects
+					for(var key in inv_array) {
+						if(string.hasOwnProperty(key)) {
+						// find the first key and parse it too, so that we can dig into the items actual data
+
+							item = inv_array[key];
+							id = item.ref;
+							if(id && (m=id.match(/\[0x([0-9a-f]+)\]/i))) {
+									id = parseInt(m[1],16);
+								icon = '<img class=item atom='+id+'>';
+								var bgurl = this.atomIcon(id);  // gets the atom's icon and makes a url for it
+							}
+							// add the item's properties into it's own div!
+							html_item = '<div draggable=true data-ref='+item.ref+' data-name='+item.name+' data-quality='+item.quality+' data-imgsrc='+bgurl+' style=\'background-image: url('+bgurl+');\' class=item ></div>';
+							var slot = 'inv_slot'+item.inv_position;
+							// add the item to the slot
+							document.getElementById(slot).innerHTML = html_item;
+							}
+					}
+
+					fixListeners();
+            }
+        }
+    };
+})()
+</script>
+
+
+</byondclass>
