@@ -38,7 +38,7 @@ mob
 
 	Login()
 		usr.loc = locate(42,36,1)
-		spawn(20)
+		spawn(10)
 			bags(usr)
 
 
@@ -52,6 +52,9 @@ mob
 			usr << output("hihihi","hands");
 
 
+		putInLeftHand()
+			usr << output("q", "hotkeys")
+			usr << "hi";
 
 		bags(mob/M as mob)
 			var/list/items = new

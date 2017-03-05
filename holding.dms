@@ -8,7 +8,7 @@
 	.lefthand {
 		position: absolute;
 	    width: 100px;
-	    height: 80px;
+	    height: 70px;
 	    bottom: 10px;
 	    left: 40%;
 	    margin:0;
@@ -24,7 +24,28 @@
 		background-image: url("slotbg.png");
 		position: absolute;
 		right: 10px;
-		top: 8px;
+		top: 12px;
+	}
+	.righthand {
+		position: absolute;
+	    width: 100px;
+	    height: 70px;
+	    bottom: 10px;
+	    left: 60%;
+	    margin:0;
+	    background-image: url("righthand.png");
+	}
+	.righthand_slot {
+		width: 42px;
+		height: 42px;
+		flex-shrink: 0;
+		display: inline-block;
+		margin:0;
+		vertical-align:top;
+		background-image: url("slotbg.png");
+		position: absolute;
+		left: 10px;
+		top: 12px;
 	}
 
 	[draggable] {
@@ -82,6 +103,9 @@
 		a = e.querySelectorAll('.inv_slot');
 		for(i=a.length; i--;) a[i].addEventListener('dblclick', dblClick); // adds the event click to the items and uses clickhandler function above
 
+		a = e.querySelectorAll('.inv_slot');
+		for(i=a.length; i--;) a[i].addEventListener('mouseout', mouseOut); // adds the event click to the items and uses clickhandler function above
+
 
 		// set listeners on the rest of the bags to add drag functionality
 		var inv_header_elem = document.getElementById('inv_header');
@@ -108,7 +132,10 @@
 		// dragSrc will be the "previous slot"
 		dragSrc = this;
 		localStorage.setItem("dragSrc", this.id);
+		localStorage.setItem("dragSrcRef",e.target.getAttribute("data-ref"));
+		localStorage.setItem("dragSrcInvPos", this.getAttribute("data-slot"));
 
+		// lock movement and do DropBox action to check for possible dropboxes
 		byond.fn.topic("action=lockmovement;v1=1");
 		byond.fn.topic("action=DropBox;v1="+e.target.getAttribute("data-ref")+";v2="+e.target.getAttribute("data-slot"));
 		dragged_inv_ref = e.target.getAttribute("data-ref");
@@ -172,8 +199,7 @@
 		dragSrc = this;
 
 		var bags = document.getElementById("bags")
-		console.log('drag target'+ e.target.getAttribute("class") + 'and this is ' +this);
-		console.log('clientX' + e.clientX + '   clientY' + e.clientY);
+
 		bags.style.position = 'absolute';
 		offY= e.clientY-parseInt(bags.offsetTop);
 		offX= e.clientX-parseInt(bags.offsetLeft);
@@ -188,42 +214,29 @@
 			var dragSrcId = localStorage.getItem("dragSrc");
 			var dragSrcRef = localStorage.getItem("dragSrcRef");
 			var dragSrcInvPos = localStorage.getItem("dragSrcInvPos");
-			console.log("dragSrcId: "+ dragSrcId);
-			console.log("dragSrcRef: "+ dragSrcRef);
-			console.log("dragSrcInvPos: "+ dragSrcInvPos);
-			console.log("this slot: "+ this.getAttribute("data-slot"));
 
 			dragSrc = document.getElementById(dragSrcId);
 			dragSrc.innerHTML = this.innerHTML;
 
-
-
-
 			// get vars of all the locations and slots
-			var original_inv_position = dragSrcInvPos;
-			var replaced_inv_position = this.getAttribute("data-slot");
-			var replaced_inv_ref = this.getAttribute("data-ref");
-
-			console.log("replaced inv pos:"+replaced_inv_position);
-			console.log("replaced inv ref:"+replaced_inv_ref);
-
+			var targetInvPos = this.getAttribute("data-slot");
+			var targetInvRef = e.target.closest('div').getAttribute("data-ref");
 
 			// send command to byond client to change the inv_positions in user's inventory
-			byond.fn.topic('action=change_inv_slot;v1='+dragSrcRef+';v2='+replaced_inv_position);
-			if(replaced_inv_ref==null || replaced_inv_ref==''){
+			byond.fn.topic('action=change_inv_slot;v1='+dragSrcRef+';v2='+targetInvPos);
+			if(targetInvRef==null || targetInvRef==''){
 				console.log("did not replace a slot");
 			} else {
 
-				if(replaced_inv_ref!=null){
+				if(targetInvRef!=null){
 					console.log("updating swapped inventory item");
-					byond.fn.topic("action=change_inv_slot;v1="+replaced_inv_ref+";v2="+replaced_inv_position);
+					byond.fn.topic("action=change_inv_slot;v1="+targetInvRef+";v2="+dragSrcInvPos);
 				}
 			}
 			fixListeners();
 			var dropboxes = document.getElementById('dropboxes');
 			dropboxes.innerHTML = '';
 			byond.fn.topic("action=lockmovement;v1=0");
-
 
 		}
 		return false;
@@ -236,6 +249,11 @@
 			document.getElementById("lefthand_slot").innerHTML = lefthand_slot_html;
 		}
 	}
+	function mouseOut(e){
+		localStorage.setItem("hoverItemId", '');
+		localStorage.setItem("hoverItemRef",'');
+		localStorage.setItem("hoverItemPos", '');
+	}
   return {
     fn: {
       output: function(obj,sub) {
@@ -243,6 +261,8 @@
 			var ez =  document.getElementById("holding");
 			var html = '';
 			html = '<div id=lefthand class=lefthand><div id=lefthand_slot data-ref=\'\' data-slot=\'lefthand\' class=lefthand_slot></div></div>';
+			html += '<div id=righthand class=righthand><div id="righthand_slot" data-ref=\'\' data-slot=\'righthand\' class=righthand_slot></div></div>';
+
 			ez.innerHTML = html;
 			var lefthand_elem = document.getElementById('lefthand_slot');
 
@@ -252,6 +272,17 @@
 			lefthand_elem.addEventListener('dragstart', drag); // adds the event click to the items and uses clickhandler function above
 			lefthand_elem.addEventListener('dragend', dragEnd); // adds the event click to the items and uses clickhandler function above
 			lefthand_elem.addEventListener('dblclick', dblClick); // adds the event click to the items and uses clickhandler function above
+			lefthand_elem.addEventListener('mouseout', mouseOut); // adds the event click to the items and uses clickhandler function above
+
+			var righthand_elem = document.getElementById('righthand_slot');
+
+			//lefthand_elem.addEventListener('mouseover', hover); // adds the event click to the items and uses clickhandler function above
+			righthand_elem.addEventListener('drop', drop); // adds the event click to the items and uses clickhandler function above
+			righthand_elem.addEventListener('dragover', allowDrop); // adds the event click to the items and uses clickhandler function above
+			righthand_elem.addEventListener('dragstart', drag); // adds the event click to the items and uses clickhandler function above
+			righthand_elem.addEventListener('dragend', dragEnd); // adds the event click to the items and uses clickhandler function above
+			righthand_elem.addEventListener('dblclick', dblClick); // adds the event click to the items and uses clickhandler function above
+			lefthand_elem.addEventListener('mouseout', mouseOut); // adds the event click to the items and uses clickhandler function above
 
       }
     }

@@ -1,5 +1,6 @@
-	mineral
-
+obj
+	item
+		mineral
 			rock
 				layer = OBJ_LAYER
 

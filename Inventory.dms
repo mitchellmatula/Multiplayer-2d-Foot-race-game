@@ -130,6 +130,8 @@
 		a = e.querySelectorAll('.inv_slot');
 		for(i=a.length; i--;) a[i].addEventListener('dblclick', dblClick); // adds the event click to the items and uses clickhandler function above
 
+		a = e.querySelectorAll('.inv_slot');
+		for(i=a.length; i--;) a[i].addEventListener('mouseout', mouseOut); // adds the event click to the items and uses clickhandler function above
 
 		// set listeners on the rest of the bags to add drag functionality
 		var inv_header_elem = document.getElementById('inv_header');
@@ -159,7 +161,16 @@
 		weight = e.target.getAttribute("data-weight");
 		ref = e.target.getAttribute("data-ref");
 
+		localStorage.setItem("hoverItemId", e.target.parentNode.id);
+		localStorage.setItem("hoverItemRef",e.target.getAttribute("data-ref"));
+		localStorage.setItem("hoverItemPos", e.target.parentNode.getAttribute("data-slot"));
+
 		tooltip.innerHTML = '<b>'+name+'</b></font>';
+	}
+	function mouseOut(e){
+		localStorage.setItem("hoverItemId", '');
+		localStorage.setItem("hoverItemRef",'');
+		localStorage.setItem("hoverItemPos", '');
 	}
 	function toggleInv(e) {  // click the arrow on header to collapse and expand the inventory
 		var inventory = document.getElementById('inv_bg');
@@ -215,7 +226,7 @@
 		localStorage.setItem("dragSrcRef",e.target.getAttribute("data-ref"));
 		localStorage.setItem("dragSrcInvPos", this.getAttribute("data-slot"));
 
-		console.log('drag target'+ e.target.getAttribute("class") + 'and this is ' +this);
+		// lock movement and do DropBox action to check for possible dropboxes
 		byond.fn.topic("action=lockmovement;v1=1");
 		byond.fn.topic("action=DropBox;v1="+e.target.getAttribute("data-ref")+";v2="+e.target.getAttribute("data-slot"));
 		dragged_inv_ref = e.target.getAttribute("data-ref");
@@ -228,22 +239,27 @@
 	function drop(e) {
 		e.stopPropagation();
 		if (dragSrc != this) {
+			var dragSrcId = localStorage.getItem("dragSrc");
+			var dragSrcRef = localStorage.getItem("dragSrcRef");
+			var dragSrcInvPos = localStorage.getItem("dragSrcInvPos");
+
+			dragSrc = document.getElementById(dragSrcId);
 			dragSrc.innerHTML = this.innerHTML;
-			this.innerHTML = e.dataTransfer.getData('text/html');
 
 			// get vars of all the locations and slots
-			var dragged_inv_position = this.getAttribute("data-slot");
-			var replaced_inv_position = dragSrc.getAttribute("data-slot");
-			var replaced_inv_ref = e.target.closest('div').getAttribute("data-ref");
+			var targetInvPos = this.getAttribute("data-slot");
+			var targetInvRef = e.target.closest('div').getAttribute("data-ref");
 
 			// send command to byond client to change the inv_positions in user's inventory
-			byond.fn.topic('action=change_inv_slot;v1='+dragged_inv_ref+';v2='+dragged_inv_position);
-			if(replaced_inv_ref==null){
+			byond.fn.topic('action=change_inv_slot;v1='+dragSrcRef+';v2='+targetInvPos);
+			if(targetInvRef==null || targetInvRef==''){
 				console.log("did not replace a slot");
-			}
-			if(replaced_inv_ref!=null){
-				console.log("updating swapped inventory item");
-				byond.fn.topic("action=change_inv_slot;v1="+replaced_inv_ref+";v2="+replaced_inv_position);
+			} else {
+
+				if(targetInvRef!=null){
+					console.log("updating swapped inventory item");
+					byond.fn.topic("action=change_inv_slot;v1="+targetInvRef+";v2="+dragSrcInvPos);
+				}
 			}
 			fixListeners();
 			var dropboxes = document.getElementById('dropboxes');
@@ -277,7 +293,6 @@
 
 					// make a new array that will parse the fixed up string from above
 					var inv_array = JSON.parse(string);
-					console.log(inv_array);
 					// build the UI Divs
 					var html = '';
 					html = '<div id=inv_header class=inv_header><div id=inv_toggle class=inv_toggle></div></div>';
@@ -308,16 +323,23 @@
 							// add the item's properties into it's own div!
 							html_item = '<div draggable=true data-ref="'+item.ref+'" data-name="'+item.name+'" data-weight="'+item.weight+'" data-imgsrc="'+bgurl+'" style=\'background-image: url('+bgurl+');\' class=item ></div>';
 							var slot = '';
-							if(item.inv_position=="lefthand")
-							{
-								slot = 'lefthand_slot';
-								document.getElementById(slot).innerHTML = html_item;
-							} else {
-								slot = 'inv_slot'+item.inv_position;
-								document.getElementById(slot).innerHTML = html_item;
+
+							switch(item.inv_position){
+								case "lefthand":
+									slot = 'lefthand_slot';
+									document.getElementById(slot).innerHTML = html_item;
+									break;
+								case "righthand":
+									slot = 'righthand_slot';
+									document.getElementById(slot).innerHTML = html_item;
+									break;
+								default:
+									slot = 'inv_slot'+item.inv_position;
+									document.getElementById(slot).innerHTML = html_item;
+
 							}
 
-							console.log("slot:"+slot);
+
 							// add the item to the slot
 
 

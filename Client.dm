@@ -16,14 +16,19 @@ client
 				var/obj/item/target = locate(v1)
 				usr << "ref: [v1] and slot : [v2]"
 				if(target)
-
-					if(v2=="lefthand")
+					if(v2=="righthand")
+						target = locate(v1) in usr.inventory
+						target.inv_position = "righthand"
+						usr.bags(usr)
+						usr << "going to righthand"
+					else if(v2=="lefthand")
 						target = locate(v1) in usr.inventory
 						target.inv_position = "lefthand"
 						usr.bags(usr)
 						usr << "going to lefthand"
 					else
 						target.inv_position = text2num(v2)
+						usr.bags(usr)
 				else
 					usr << "didnt find target"
 			if("DropBox")
@@ -89,6 +94,9 @@ client
 			if("say")
 
 				oview(20) << output(v1,"speechbubble")
+			if("getitem")
+				var/obj/item/target = locate(v1)
+				Get(usr, target)
 client
 	var
 		mouse_x

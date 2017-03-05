@@ -16,7 +16,7 @@
 	<div id="input" byondclass="input"></div>
 	<div id="bags" byondclass="bags" skinparams="is-visible=true"></div>
 	<div id="dropboxes" byondclass="dropboxes" skinparams="is-visible=true"></div>
-
+	<div id="hotkeys" byondclass="hotkeys" skinparams="is-visible=true"></div>
 </body>
 </html>
 <style>
@@ -47,5 +47,3 @@ macro
 	I return "listInv"
 macro
 	O return "clearinv"
-macro
-	W return "north"
