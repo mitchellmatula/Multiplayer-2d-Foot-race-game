@@ -16,6 +16,7 @@
 #include "Organics.dm"
 #include "Phennexion.dm"
 #include "Proc.dm"
+#include "story.dm"
 #include "Turfs.dm"
 #include "Test.dmf"
 #include "World.dmm"

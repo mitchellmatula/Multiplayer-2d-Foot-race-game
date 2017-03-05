@@ -1,48 +1,67 @@
 <byondclass name="hotkeys">
 <script>
-	{
-	  fn: {
-	    output: function(obj,sub) {
+(function(){
+
+	function changeHolding(position){
+		var hoveredItemId = localStorage.getItem("hoverItemId");
+		var hoveredItemRef = localStorage.getItem("hoverItemRef");
+		var hoveredItemPos = localStorage.getItem("hoverItemPos");
+		console.log(hoveredItemPos);
+		console.log(position);
+
+		if(hoveredItemId == '' || position == hoveredItemPos){
+			// put item into first unused slot
+			if(document.getElementById(position+'_slot').hasChildNodes()){
+				var handCheck = document.getElementById(position+'_slot');
+				var handItemRef = handCheck.firstChild.getAttribute('data-ref');
+				byond.fn.topic("action=getitem;v1="+handItemRef);
+
+				localStorage.setItem("hoverItemId", '');
+				localStorage.setItem("hoverItemRef",'');
+				localStorage.setItem("hoverItemPos", '');
+			}
+		}
+		if(hoveredItemId != '' &&  position != hoveredItemPos){
+			// check to see if user already holding an item
+			byond.fn.topic('action=change_inv_slot;v1='+hoveredItemRef+';v2='+position);
+
+			if(document.getElementById(position+'_slot').hasChildNodes()){
+				var handCheck = document.getElementById(position+'_slot');
+				var handItemRef = handCheck.firstChild.getAttribute('data-ref');
+				byond.fn.topic("action=change_inv_slot;v1="+handItemRef+";v2="+hoveredItemPos);
+
+				localStorage.setItem("hoverItemId", handCheck.id);
+				localStorage.setItem("hoverItemRef",handCheck.firstChild.getAttribute("data-ref"));
+				localStorage.setItem("hoverItemPos", hoveredItemPos);
+			}
+		}
+
+	}
+
+  return {
+    fn: {
+      output: function(obj,sub) {
 			var string = obj.text;
 
 			string = string.replace(/\n+$/,'');
 			string = string.replace(/^\n+/,'');
 			string = string.replace(/<br\s*\/?>/gi,'');
 
-			var hoveredItemId = localStorage.getItem("hoverItemId");
-			var hoveredItemRef = localStorage.getItem("hoverItemRef");
-			var hoveredItemPos = localStorage.getItem("hoverItemPos");
-
-			if(string == 'q' && hoveredItemId != ''){
-				// check to see if user already holding an item
-				byond.fn.topic('action=change_inv_slot;v1='+hoveredItemRef+';v2=lefthand');
-
-				if(document.getElementById('lefthand_slot').hasChildNodes()){
-					var lefthandCheck = document.getElementById('lefthand_slot');
-					var leftHandItemRef = lefthandCheck.firstChild.getAttribute('data-ref');
-					byond.fn.topic("action=change_inv_slot;v1="+leftHandItemRef+";v2="+hoveredItemPos);
-
-					localStorage.setItem("hoverItemId", lefthandCheck.id);
-					localStorage.setItem("hoverItemRef",lefthandCheck.firstChild.getAttribute("data-ref"));
-					localStorage.setItem("hoverItemPos", hoveredItemPos);
-				}
-			}
-			if(string == 'q' && hoveredItemId == ''){
-				// put item into first unused slot
-				if(document.getElementById('lefthand_slot').hasChildNodes()){
-					var lefthandCheck = document.getElementById('lefthand_slot');
-					var leftHandItemRef = lefthandCheck.firstChild.getAttribute('data-ref');
-					byond.fn.topic("action=getitem;v1="+leftHandItemRef);
-
-					localStorage.setItem("hoverItemId", '');
-					localStorage.setItem("hoverItemRef",'');
-					localStorage.setItem("hoverItemPos", '');
-				}
+			switch(string){
+				case 'q':
+					changeHolding('lefthand');
+					break
+				case 'e':
+					changeHolding('righthand');
+					break;
+				default:
+					break;
 			}
 
 
-	    }
-	  }
-	}
+      }
+    }
+  };
+})()
 </script>
 </byondclass>

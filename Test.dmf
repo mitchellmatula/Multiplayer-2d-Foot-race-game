@@ -21,6 +21,9 @@ macro "macro"
 		name = "D+REP"
 		command = ".east"
 	elem 
+		name = "E"
+		command = "putInRightHand"
+	elem 
 		name = "Q"
 		command = "putInLeftHand"
 	elem 

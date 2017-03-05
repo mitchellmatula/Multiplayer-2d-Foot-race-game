@@ -67,6 +67,103 @@ turf
 				if(600 to 1000)
 					new/obj/item/inorganic/rock(x,y,z)
 
+	lightDirt
+		icon = 'Turfs.dmi'
+		icon_state = "lightDirt"
+		New(_x,_y,_z)
+			var occurence = rand(1,1000)
+			switch(occurence)
+				if(1 to 899)
+					// nothing
+				if(900 to 1000)
+					new/obj/item/inorganic/rock(x,y,z)
+
+	LightDirtToGrass
+		NW
+			icon = 'Turfs.dmi'
+			icon_state = "lightDirtToGrass_NW"
+		NN
+			icon = 'Turfs.dmi'
+			icon_state = "lightDirtToGrass_N"
+		NE
+			icon = 'Turfs.dmi'
+			icon_state = "lightDirtToGrass_NE"
+		W
+			icon = 'Turfs.dmi'
+			icon_state = "lightDirtToGrass_W"
+		EE
+			icon = 'Turfs.dmi'
+			icon_state = "lightDirtToGrass_E"
+		SW
+			icon = 'Turfs.dmi'
+			icon_state = "lightDirtToGrass_SW"
+		SS
+			icon = 'Turfs.dmi'
+			icon_state = "lightDirtToGrass_S"
+		SE
+			icon = 'Turfs.dmi'
+			icon_state = "lightDirtToGrass_SE"
+		INSIDENW
+			icon = 'Turfs.dmi'
+			icon_state = "lightDirtToGrass_innerNW"
+		INSIDENE
+			icon = 'Turfs.dmi'
+			icon_state = "lightDirtToGrass_innerNE"
+		INSIDESW
+			icon = 'Turfs.dmi'
+			icon_state = "lightDirtToGrass_innerSW"
+		INSIDESE
+			icon = 'Turfs.dmi'
+			icon_state = "lightDirtToGrass_innerSE"
+
+	PavedStone
+		variant1
+			icon = 'Turfs.dmi'
+			icon_state = "pavedStoneInner1"
+		variant2
+			icon = 'Turfs.dmi'
+			icon_state = "pavedStoneInner2"
+		variant3
+			icon = 'Turfs.dmi'
+			icon_state = "pavedStoneInner3"
+		variant4
+			icon = 'Turfs.dmi'
+			icon_state = "pavedStoneInner4"
+		variant5
+			icon = 'Turfs.dmi'
+			icon_state = "pavedStoneInner5"
+		variant6
+			icon = 'Turfs.dmi'
+			icon_state = "pavedStoneInner6"
+
+
+	PavedStoneToDirt
+		NW
+			icon = 'Turfs.dmi'
+			icon_state = "pavedStoneToDirt_NW"
+		NN
+			icon = 'Turfs.dmi'
+			icon_state = "pavedStoneToDirt_N"
+		NE
+			icon = 'Turfs.dmi'
+			icon_state = "pavedStoneToDirt_NE"
+		WW
+			icon = 'Turfs.dmi'
+			icon_state = "pavedStoneToDirt_W"
+		EE
+			icon = 'Turfs.dmi'
+			icon_state = "pavedStoneToDirt_E"
+		SW
+			icon = 'Turfs.dmi'
+			icon_state = "pavedStoneToDirt_SW"
+		SS
+			icon = 'Turfs.dmi'
+			icon_state = "pavedStoneToDirt_S"
+		SE
+			icon = 'Turfs.dmi'
+			icon_state = "pavedStoneToDirt_SE"
+
+
 	grasstodirt
 		NW
 			icon = 'Turfs.dmi'

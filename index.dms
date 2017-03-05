@@ -12,9 +12,10 @@
 	<div id="speechbubble" byondclass="speechbubble" skinparams="is-visible=true"></div>
 	<div id="thoughtbubble" byondclass="thoughtbubble" skinparams="is-visible=true"></div>
 	<div id="output" byondclass="output"></div>
-	<div id="holding" byondclass="holding" skinparams="is-visible=true"></div>
 	<div id="input" byondclass="input"></div>
 	<div id="bags" byondclass="bags" skinparams="is-visible=true"></div>
+	<div id="holding" byondclass="holding" skinparams="is-visible=true"></div>
+
 	<div id="dropboxes" byondclass="dropboxes" skinparams="is-visible=true"></div>
 	<div id="hotkeys" byondclass="hotkeys" skinparams="is-visible=true"></div>
 </body>

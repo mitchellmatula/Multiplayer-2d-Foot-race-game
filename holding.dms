@@ -85,7 +85,7 @@
 		e = document.getElementById("inv");
 
 		// cycle through all the existing  .items and .item_slots and ensure the drag listeners are set
-		a = e.querySelectorAll('.item');
+		a = document.querySelectorAll('.item');
 		for(i=a.length; i--;) a[i].addEventListener('mouseover', hover); // adds the event click to the items and uses clickhandler function above
 
 		a = e.querySelectorAll('.inv_slot');
@@ -154,6 +154,12 @@
 		name = e.target.getAttribute("data-name");
 		weight = e.target.getAttribute("data-weight");
 		ref = e.target.getAttribute("data-ref");
+		localStorage.setItem("hoverItemId", e.target.parentNode.id);
+		localStorage.setItem("hoverItemRef",e.target.getAttribute("data-ref"));
+		localStorage.setItem("hoverItemPos", e.target.parentNode.getAttribute("data-slot"));
+		console.log(localStorage.getItem("hoverItemId"));
+		console.log(localStorage.getItem("hoverItemRef"));
+		console.log(localStorage.getItem("hoverItemPos"));
 
 		tooltip.innerHTML = '<b>'+name+'</b></font>';
 	}
@@ -282,7 +288,8 @@
 			righthand_elem.addEventListener('dragstart', drag); // adds the event click to the items and uses clickhandler function above
 			righthand_elem.addEventListener('dragend', dragEnd); // adds the event click to the items and uses clickhandler function above
 			righthand_elem.addEventListener('dblclick', dblClick); // adds the event click to the items and uses clickhandler function above
-			lefthand_elem.addEventListener('mouseout', mouseOut); // adds the event click to the items and uses clickhandler function above
+			righthand_elem.addEventListener('mouseout', mouseOut); // adds the event click to the items and uses clickhandler function above
+
 
       }
     }

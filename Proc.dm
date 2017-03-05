@@ -2,6 +2,19 @@ proc
 	Examine(mob/M, obj/target)
 		// determine what the object is
 		// minerals
+		if(istype(target,/obj/story/tablet_bottom))
+			usr.lockmovement = 1
+			usr << output("This <font color=#3d0099> stone tablet</font> says..", "thoughtbubble")
+			sleep(10)
+			usr << output("Welcome to Phennexion", "thoughtbubble")
+			sleep(10)
+			usr << output("Learn to survive...", "thoughtbubble")
+			sleep(10)
+			usr << output("Survive then thrive...", "thoughtbubble")
+			sleep(10)
+			usr << output("Thrive and conquor!", "thoughtbubble")
+			usr.lockmovement = 0
+
 		if(istype(target,/obj/item))
 			usr << "You examine [target.name]"
 			var/tmp/obj/item/O = target

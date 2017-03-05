@@ -54,7 +54,10 @@ mob
 
 		putInLeftHand()
 			usr << output("q", "hotkeys")
-			usr << "hi";
+
+		putInRightHand()
+			usr << output("e", "hotkeys")
+
 
 		bags(mob/M as mob)
 			var/list/items = new

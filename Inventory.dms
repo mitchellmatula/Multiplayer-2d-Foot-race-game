@@ -112,7 +112,7 @@
 		e = document.getElementById("inv");
 
 		// cycle through all the existing  .items and .item_slots and ensure the drag listeners are set
-		a = e.querySelectorAll('.item');
+		a = document.querySelectorAll('.item');
 		for(i=a.length; i--;) a[i].addEventListener('mouseover', hover); // adds the event click to the items and uses clickhandler function above
 
 		a = e.querySelectorAll('.inv_slot');
