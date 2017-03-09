@@ -34,8 +34,17 @@ turf
 			src.icon_state = "grass[num2text(rand(1,4))]"
 			var occurence = rand(1,1000)
 			switch(occurence)
-				if(1 to 790)
+				if(1 to 773)
 					return
+				if(774 to 777)
+					var radius = rand(0,0)
+					SpawnInRadius("/obj/item/organic/deadlog",radius,100,1)
+				if(778 to 780)
+					var radius = rand(1,3)
+					SpawnInRadius("/obj/item/organic/edibles/redshroom",radius,20,1)
+				if(781 to 789)
+					var radius = rand(1,2)
+					SpawnInRadius("/obj/item/organic/edibles/brownshroom",radius,10,1)
 				if(790 to 800)
 					var radius = rand(1,5)
 					SpawnInRadius("/obj/item/organic/pinkflower",radius,3,1)

@@ -8,6 +8,7 @@ obj
 				layer= OBJ_LAYER
 				pixel_x = 0
 				pixel_y = 0
+
 				New(_x,_y,_z)
 					var randtype = rand(1,1000)
 					switch(randtype)
@@ -37,6 +38,7 @@ obj
 							src.icon_state = "large_brownstone_bottom"
 							src.name = "Brownstone"
 							density = 1
+
 							src.hardness = rand(2,3)
 							src.strength = rand(3,5)
 							weight = rand(750,1500)
@@ -63,6 +65,7 @@ obj
 							src.icon = 'inorganics.dmi'
 							src.name = "Greystone"
 							density = 1
+
 							src.hardness = rand(2,6)
 							src.strength = rand(1,7)
 							weight = rand(750,1500)
@@ -89,6 +92,7 @@ obj
 							src.icon = 'inorganics.dmi'
 							src.name = "Large Roughstone"
 							weight = rand(900,1900)
+
 							src.hardness = rand(3,4)
 							density = 1
 							src.strength = rand(5,8)
@@ -110,8 +114,10 @@ obj
 					pixel_y = 32
 					layer = MOB_LAYER+1
 					density = 1
+
 					New()
 						src.pixel_y = 32
+
 				large_greystone_top
 					icon = 'inorganics.dmi'
 					icon_state = "large_greystone_top"
@@ -120,11 +126,13 @@ obj
 					density = 1
 					New()
 						src.pixel_y = 32
+
 				large_heavystone_top
 					icon = 'inorganics.dmi'
 					icon_state = "large_heavystone_top"
 					pixel_y = 32
 					layer = MOB_LAYER+1
 					density = 1
+
 					New()
 						src.pixel_y = 32

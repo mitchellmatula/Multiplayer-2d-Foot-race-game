@@ -67,6 +67,25 @@ obj
 					src.pixel_x = rand(-2,2)
 					src.pixel_y = rand(-2.2)
 
+
+
+			deadlog
+				icon = 'organics.dmi'
+				density = 0
+				name = "Deadlog"
+				layer = OBJ_LAYER
+				New(_x,_y,_z)
+					src.quality = rand(1,100)
+					weight = rand(5,15)/10
+					src.icon_state = "deadlog[rand(1,2)]"
+					src.loc = locate(_x,_y,_z)
+					src.pixel_x = rand(-2,2)
+					src.pixel_y = rand(-2.2)
+
+
+
+
+
 			big_tree //http://www.woodweb.com/cgi-bin/calculators/calc.pl
 				icon = 'Tree.dmi'
 				icon_state = "base"
@@ -102,6 +121,7 @@ obj
 				icon = 'spruce_top.dmi'
 				density = 0
 				layer = MOB_LAYER+1
+
 				New(_x,_y,_z)
 					src.pixel_y = 32
 					src.layer = MOB_LAYER+(700-_y)+(_x*0.042345)

@@ -13,6 +13,7 @@
 #include "Minerals.dm"
 #include "Mob.dm"
 #include "Obj.dm"
+#include "OrganicEdibles.dm"
 #include "Organics.dm"
 #include "Phennexion.dm"
 #include "Proc.dm"
